@@ -20,7 +20,12 @@ from app.utils.gemini_client import gemini_client
 
 logger = structlog.get_logger(__name__)
 
-app = FastAPI(title=settings.PROJECT_NAME, version=settings.VERSION)
+app = FastAPI(
+    title=settings.PROJECT_NAME,
+    version=settings.VERSION,
+    docs_url=f"{settings.API_V1_STR}/docs",
+    redoc_url=f"{settings.API_V1_STR}/redoc",
+)
 
 # Configure CORS
 app.add_middleware(
@@ -51,7 +56,7 @@ async def covera_error_handler(request: Request, exc: CoveraError):
 # Health check endpoint
 @app.get("/health")
 async def health_check():
-    return SuccessResponse(message="ok").model_dump()
+    return {"status": "healthy", "version": settings.VERSION}
 
 # Chat message endpoints
 @app.post("/api/chat/messages")
@@ -188,4 +193,9 @@ async def analyze_policy(request: PolicyAnalysisRequest):
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(
+        "main:app",
+        host=settings.HOST,
+        port=settings.PORT,
+        reload=settings.DEBUG
+    )
