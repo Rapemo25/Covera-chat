@@ -41,3 +41,6 @@ jobs:
         else
           echo "No tests directory found, skipping tests."
         fi
+    - name: Run Flask app
+      run: |
+        python app.py

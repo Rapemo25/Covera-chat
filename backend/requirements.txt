@@ -11,3 +11,4 @@ tenacity>=8.2.3
 structlog>=24.1.0
 python-decouple>=3.8
 supabase>=1.0.3
+Flask==2.0.3
